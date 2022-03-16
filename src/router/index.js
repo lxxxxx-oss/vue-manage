@@ -18,6 +18,21 @@ const routes = [
         path:'/user',
         name:'user',
         component: () => import('../views/User/index')
+      },
+      {
+        path:'/mall',
+        name:'mall',
+        component: () => import('../views/mall/index')
+      },
+      {
+        path:'/page1',
+        name:'page1',
+        component: () => import('../views/other/pageOne')
+      },
+      {
+        path:'/page2',
+        name:'page2',
+        component: () => import('../views/other/pageTwo')
       }
     ]
   },
