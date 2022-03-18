@@ -25,14 +25,14 @@
         placeholder="请选择"
         v-model="form[item.model]"
       >
+        <el-option
+          v-for="item in item.opts"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        >
+        </el-option>
       </el-select>
-      <el-option
-        v-for="item in item.opts"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value"
-      >
-      </el-option>
     </el-form-item>
     <el-form-item>
       <slot></slot>

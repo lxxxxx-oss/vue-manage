@@ -1,46 +1,35 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+// import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
 
-const routes = [
+//获取原型对象上的push函数
+const originalPush = VueRouter.prototype.push
+//修改原型对象中的push方法
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
+
+const routes=[
   {
     path:'/',
     name:'Main',
-    component: () => import('../views/Main'),
-    children: [
-      {
-        path: '/home',
-        name: 'home',
-        component: () => import('../views/home/index')
-      },
-      {
-        path:'/user',
-        name:'user',
-        component: () => import('../views/User/index')
-      },
-      {
-        path:'/mall',
-        name:'mall',
-        component: () => import('../views/mall/index')
-      },
-      {
-        path:'/page1',
-        name:'page1',
-        component: () => import('../views/other/pageOne')
-      },
-      {
-        path:'/page2',
-        name:'page2',
-        component: () => import('../views/other/pageTwo')
-      }
-    ]
+    component:()=>import ('../views/Main.vue'),
+    children:[]
+  },
+  {
+    path:'/login',
+    name:'login',
+    component:()=>import('../views/login/login.vue')
   },
 ]
-
-const router = new VueRouter({
-  mode: 'history',
+const router=new VueRouter({
+  path: '/home',
+  mode:'history',
   routes
-})
 
+})
 export default router
+
+

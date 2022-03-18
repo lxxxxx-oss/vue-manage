@@ -1,20 +1,26 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import user from './user'
+import Cookie from "js-cookie";
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
-  state: {
-    isCollapse: false,
-    tabsList: [
+  state:{
+    isCollapse:false,
+    tabsList:[
       {
-        path: '/',
-        name: 'home',
-        label: '首页',
-        icon: 'home'
-      },
+        path:'/',
+        name:"home",
+        label:'首页',
+        icon:'home'
+      }
     ],
-    currentMenu: null
+    currentMenu:null,
+    menu:[]
+  },
+  modules: {
+    user
   },
   mutations: {
     collapseMenu(state) {
@@ -34,6 +40,38 @@ const store = new Vuex.Store({
     closeTag(state, val) {
       const result = state.tabsList.findIndex(item => item.name === val.name)
       state.tabsList.splice(result , 1)
+    },
+    setMenu(state, val) {
+      state.menu = val
+      Cookie.set('menu', JSON.stringify(val))
+    },
+    clearMenu(state) {
+      state.menu = []
+      Cookie.remove('menu')
+    },
+    addMenu(state, router ) {
+      if(!Cookie.get('menu')) {
+        reurn
+      }
+      const menu = JSON.parse(Cookie.get('menu'))
+      state.menu = menu
+      const menuArray = []
+      menu.forEach(item => {
+        if(item.children) {
+          item.children = item.children.map(item => {
+            item.component =()=>import(`../views/${item.url}`)
+            return item
+          })
+          menuArray.push(...item.children)
+        }else {
+          item.component =()=>import(`../views/${item.url}`)
+          menuArray.push(item)
+        }
+      })
+      //路由的动态添加
+      menuArray.forEach(item => {
+        router.addRoute('Main', item)
+      })
     }
   }
 })

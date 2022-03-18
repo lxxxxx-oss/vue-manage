@@ -49,7 +49,6 @@ export default {
           name: this.tags[index].name
         })
       }
-
     }
   }
 }
